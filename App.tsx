@@ -24,7 +24,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import Inicio from './Inicio';
+//import Inicio from './Inicio';
+import Inscripcion from './Inscripcion';
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -62,7 +63,7 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  return <Inicio />;
+  return <Inscripcion />;
 }
 
 const styles = StyleSheet.create({

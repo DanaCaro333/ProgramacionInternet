@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity, TextInput } from 'react-native';
+import { NavigationContext } from '@react-navigation/native'
 
 export default class Inicio extends Component {
+  static contextType = NavigationContext;
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -9,6 +12,25 @@ export default class Inicio extends Component {
   }
 
   render() {
+    const navigation = this.context;
+    const btnLogin = ()=>{
+      var request = new XMLHttpRequest();
+      request.onreadystatechange = (e) => {
+        if (request.readyState !== 4) {
+          return;
+        }
+      
+        if (request.status === 200) {
+          console.log('success', request.responseText);
+        } else {
+          console.warn('error');
+        }
+      };
+      
+      request.open('GET', `https://insatiable-flap.000webhostapp.com/datos.php?nombre=${this.state.nombre}&correo=${this.state.correo}&password=${this.state.password}`);
+      request.send();
+    }
+
     return (
       <View style = {styles.fondo}>
       <Image
@@ -16,20 +38,23 @@ export default class Inicio extends Component {
         source={require("./Imagenes/VotarInicio.png")}
       />
       <View style = {styles.login}>
-        <Text style={styles.txtTitle}>Votación Virtual</Text>
-      <View style={styles.campoUser}>
-      <Text style={styles.txtCampo}>User</Text>
-      </View>
+      <Text style={styles.txtTitle}>Votación Virtual</Text>
+      <TextInput style={styles.campoUser}
+            placeholder='User'
+            onChangeText={(nombre) => this.setState({nombre})}
+          />
+        <TextInput style={styles.campoPassword}
+              placeholder='Password'
+              onChangeText={(nombre) => this.setState({nombre})}
+            />
 
-      <View style={styles.campoPassword}>
-      <Text style={styles.txtCampo}>Password</Text>
-      </View>
+        <TouchableOpacity style= {styles.buttonLogin} onPress={btnLogin} >
+                <Text style= {styles.txtBtn}>LOGIN</Text>
+            </TouchableOpacity>
+        
 
-      <View style={styles.buttonLogin}>
-      <Text style={styles.txtBtn}>Login</Text>
-      </View>
-
-      <Text style={styles.SingUp}>Don't have an account? Sing up</Text>
+      <Text style={styles.SingUp}>Don't have an account? <TouchableOpacity style={{borderWidth: 0, width:60,height:20,}}>
+        <Text style={{marginTop: 4, fontWeight: 'bold', color: "#184E76"}} onPress={() => navigation.navigate('Inscripcion')} >SIGN UP</Text></TouchableOpacity></Text>
       </View>
       </View>
     );
@@ -88,7 +113,8 @@ const styles = StyleSheet.create({
 
     SingUp:{
         textAlign:"center",
-        marginTop:17,
+        marginTop:12,
+        color: "white"
     },
 
     txtCampo:{
@@ -121,5 +147,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize:15, 
     }
-
 })
