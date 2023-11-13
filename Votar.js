@@ -1,6 +1,8 @@
 import React, { Component, useState } from 'react';
-import { View, Text, Button, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
-
+import * as React from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
+import { Button } from "./Button";
+import { Modal } from "./Modal";
 //Importacion de componentes
 
 
@@ -15,6 +17,7 @@ export default class Inicio extends Component {
     };
   }
 
+
   showView = (nombreView)=>{
     this.setState({Visibleview: nombreView});
   }
@@ -22,7 +25,8 @@ export default class Inicio extends Component {
 
   render() {
     //Programacion de objetos
-    const [show, setShow] = useState(true)
+
+    
     const btnAceptar = ()=>{
       var request = new XMLHttpRequest();
       request.onreadystatechange = (e) => {
@@ -46,24 +50,22 @@ export default class Inicio extends Component {
 
     <View style={styles.container}>
       <Text style={{marginTop: 25, fontSize: 30, color: '#3289a8'}}>SIGN UP</Text>
-        <div className='Voto'>
-          show? 
           <View style={styles.container2}>
-                <TouchableOpacity style= {styles.btn_favor} onPress={()=> this.showView('viewEmail')}>
+                <TouchableOpacity style= {styles.btn_favor} onPress={()=> {setOpenModal = true}}>
                 <Image
                 style={styles.icono}
                 source={require("./Imagenes/aceptar.png")}
-              />
+                />
                 </TouchableOpacity>
+                {Allowance.openModal && <Modal />}
 
                 <TouchableOpacity style= {styles.btn_contra} onPress={()=> this.showView('viewFacebook')}>
                 <Image
                 style={styles.icono}
                 source={require("./Imagenes/menos.png")}
-              />
+                />
                 </TouchableOpacity>
           </View>
-        </div>
 
        
        
