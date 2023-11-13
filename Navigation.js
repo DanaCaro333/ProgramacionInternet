@@ -5,7 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerNavigator } from './screens/DrawerNavigator';
 import Inicio from './Inicio';
-import Inscripcion from './Inscripcion';
+import Votar from './Votar';
+
 
 
 export default class Navigation extends Component {
@@ -26,7 +27,7 @@ export default class Navigation extends Component {
           component={Inicio}
           options={{headerShown: false}}
           />
-        <Stack.Screen name="Inscripcion" component={Inscripcion} />
+        <Stack.Screen name="Votar" component={Votar} />
       </Stack.Navigator>
       </NavigationContainer>
 

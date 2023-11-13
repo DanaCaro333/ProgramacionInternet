@@ -22,6 +22,7 @@ export default class Inicio extends Component {
       
         if (request.status === 200) {
           console.log('success', request.responseText);
+          navigation.navigate('Votar')
         } else {
           console.warn('error');
         }
@@ -52,9 +53,6 @@ export default class Inicio extends Component {
                 <Text style= {styles.txtBtn}>LOGIN</Text>
             </TouchableOpacity>
         
-
-      <Text style={styles.SingUp}>Don't have an account? <TouchableOpacity style={{borderWidth: 0, width:60,height:20,}}>
-        <Text style={{marginTop: 4, fontWeight: 'bold', color: "#184E76"}} onPress={() => navigation.navigate('Inscripcion')} >SIGN UP</Text></TouchableOpacity></Text>
       </View>
       </View>
     );
