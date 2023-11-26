@@ -1,139 +1,205 @@
-import React, { Component, useState } from 'react';
-import * as React from "react";
+import { func } from 'prop-types';
+import React, { Component, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
-import { Button } from "./Button";
-import { Modal } from "./Modal";
+
 //Importacion de componentes
 
-
 export default class Inicio extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {//declaracion de variables
-      Visibleview: null,
-      nombre: '',
-      correo: '',
-      password: '',
+      Visibleview: 'Iniciar',
+      stateV: '',
     };
+
   }
-
-
   showView = (nombreView)=>{
     this.setState({Visibleview: nombreView});
   }
 
-
   render() {
     //Programacion de objetos
+    const delay = ms => new Promise(
+      resolve => setTimeout(resolve, ms)
+    );
 
-    
-    const btnAceptar = ()=>{
+
+    const btnUpdate1 = async event =>{
       var request = new XMLHttpRequest();
-      request.onreadystatechange = (e) => {
-        if (request.readyState !== 4) {
-          return;
-        }
-      
-        if (request.status === 200) {
-          console.log('success', request.responseText);
-        } else {
-          console.warn('error');
-        }
-      };
-      
-      request.open('GET', `https://insatiable-flap.000webhostapp.com/datos.php?nombre=${this.state.nombre}&correo=${this.state.correo}&password=${this.state.password}`);
+      request.open('GET', `http://192.168.1.74/2023B/votar.php?Voto=1`);
       request.send();
+      var ready = new XMLHttpRequest();
+      ready.open('GET', `http://192.168.1.74/2023B/conteo.php`);
+      ready.send();
+      checkState();
     }
 
-    
+    const btnUpdate2 = async event =>{
+      var request = new XMLHttpRequest();
+      request.open('GET', `http://192.168.1.74/2023B/votar.php?Voto=1`);
+      request.send();
+      var ready = new XMLHttpRequest();
+      ready.open('GET', `http://192.168.1.74/2023B/conteo.php`);
+      ready.send();
+      checkState();
+    }
+
+    const btnUpdate3 = async event =>{
+      var request = new XMLHttpRequest();
+      request.open('GET', `http://192.168.1.74/2023B/votar.php?Voto=1`);
+      request.send();
+      var ready = new XMLHttpRequest();
+      ready.open('GET', `http://192.168.1.74/2023B/conteo.php`);
+      ready.send();
+      checkState();
+    }
+
+    const stateCentral = () =>{
+        var check = new XMLHttpRequest();
+        check.open('GET', `http://192.168.1.74/2023B/voto.php/`);
+        check.send();
+        aux = check.onreadystatechange = (e) => {
+          if(check.responseText === "1"){
+            this.setState({stateV: check.responseText});
+          }else{
+            this.setState({stateV: "0"});
+          }
+        };
+    };
+
+    const checkState = async event =>{
+      this.showView('Upload');
+      this.setState({stateV: "0"})
+      while(this.state.stateV != '1'){
+        stateCentral();
+        console.log('waiting');
+        await delay(1000);
+        console.log(this.state.stateV);
+      }
+      var request = new XMLHttpRequest();
+      request.open('GET', `http://192.168.1.74/2023B/adminL.php?Admin=0`);
+      request.send();
+      this.showView('viewOpciones');
+    };
+
     return (//parte visible que se mostrará
-
+    
     <View style={styles.container}>
-      <Text style={{marginTop: 25, fontSize: 30, color: '#3289a8'}}>SIGN UP</Text>
-          <View style={styles.container2}>
-                <TouchableOpacity style= {styles.btn_favor} onPress={()=> {setOpenModal = true}}>
-                <Image
-                style={styles.icono}
-                source={require("./Imagenes/aceptar.png")}
-                />
-                </TouchableOpacity>
-                {Allowance.openModal && <Modal />}
-
-                <TouchableOpacity style= {styles.btn_contra} onPress={()=> this.showView('viewFacebook')}>
-                <Image
-                style={styles.icono}
-                source={require("./Imagenes/menos.png")}
-                />
-                </TouchableOpacity>
-          </View>
-
-       
-       
-
       {this.state.Visibleview === 'viewOpciones' &&(
-        <View style={styles.container3}>
-          <TouchableOpacity style= {styles.btn_favor} onPress={()=> this.showView('viewEmail')}>
-          <Image
-          style={styles.icono}
-          source={require("./Imagenes/aceptar.png")}
-        />
-          </TouchableOpacity>
+         <View style={styles.container}>
+          <Text style={{marginTop: 45, fontSize: 30, color: '#3289a8'}}>Acuerdo #2983</Text>
+          <View style={styles.container2}>
+            <TouchableOpacity style= {styles.btn_favor} onPress={()=> this.showView('Aceptar')}>
+            <Image
+            style={styles.icono}
+            source={require("./Imagenes/aceptar.png")}
+          />
+            </TouchableOpacity>
 
-          <TouchableOpacity style= {styles.btn_contra} onPress={()=> this.showView('viewFacebook')}>
-          <Image
-          style={styles.icono}
-          source={require("./Imagenes/menos.png")}
-        />
-          </TouchableOpacity>
+            <TouchableOpacity style= {styles.btn_contra} onPress={()=> this.showView('Cancelar')}>
+            <Image
+            style={styles.icono}
+            source={require("./Imagenes/menos.png")}
+          />
+            </TouchableOpacity>
+
+            <TouchableOpacity style= {styles.btn_anular} onPress={()=> this.showView('Anular')}>
+            <Image
+            style={styles.icono}
+            source={require("./Imagenes/anular.png")}
+          />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
+      {this.state.Visibleview === 'Aceptar' &&(
+        <View style={styles.container}>
+          <Text style={{marginTop: 45, fontSize: 30, color: '#3289a8'}}>Acuerdo #2983</Text>
+          <View style={styles.confirmacionFavor}>
+            <Text style={{fontSize: 30,color:'#00830E',marginBottom:20}}>¿Agregar voto a favor?</Text>
+            <Image
+            style={styles.icono}
+            source={require("./Imagenes/aceptar.png")}
+          />
+          <View style={styles.buttons}>
+            <TouchableOpacity style= {styles.popup_btn} onPress={()=> this.showView('viewOpciones')}>
+                <Text style= {{fontSize: 16, color: '#094683'}}>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style= {styles.popup_btn} onPress={btnUpdate1}>
+                <Text style= {{fontSize: 16, color: '#094683'}}>Aceptar</Text>
+            </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
       )}
 
-      {this.state.Visibleview === 'viewEmail' &&(
-        <View style={styles.containerMail}>
-          <Text style={{fontSize: 40,color:'white',}}>EMAIL</Text>
-          <TextInput style={styles.touchable}
-            placeholder='Nombre'
-            onChangeText={(nombre) => this.setState({nombre})}
+      {this.state.Visibleview === 'Cancelar' &&(
+        <View style={styles.container}>
+          <Text style={{marginTop: 45, fontSize: 30, color: '#3289a8'}}>Acuerdo #2983</Text>
+          <View style={styles.confirmacionContra}>
+            <Text style={{fontSize: 30,color:'#B71600',marginBottom:20}}>¿Agregar voto en contra?</Text>
+            <Image
+            style={styles.icono}
+            source={require("./Imagenes/menos.png")}
           />
-          <TextInput style={styles.touchable}
-            placeholder='correo'
-            onChangeText={(correo) => this.setState({correo})}
-          />
-          <TextInput style={styles.touchable}
-            placeholder='contraseña'
-            onChangeText={(password) => this.setState({password})}
-          />
-
-        <TouchableOpacity style= {styles.aceptar} onPress={btnAceptar} >
-            <Text style= {{marginLeft: 10, marginTop: 11, fontSize: 16, color: 'black'}}>ACEPTAR</Text>
-        </TouchableOpacity>
-
-
+          <View style={styles.buttons}>
+            <TouchableOpacity style= {styles.popup_btn} onPress={()=> this.showView('viewOpciones')}>
+                <Text style= {{fontSize: 16, color: '#094683'}}>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style= {styles.popup_btn} onPress={btnUpdate2}>
+                <Text style= {{fontSize: 16, color: '#094683'}}>Aceptar</Text>
+            </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
       )}
 
-      {this.state.Visibleview === 'viewFacebook' &&(
-        <View style={styles.containerFacebook}>
-          <Text style={{fontSize: 40,color:'white',}}>FACEBOOK</Text>
-          <TextInput style={styles.touchable}
-            placeholder='Nombre'
-            onChangeText={(nombre) => this.setState({nombre})}
+      {this.state.Visibleview === 'Anular' &&(
+        <View style={styles.container}>
+          <Text style={{marginTop: 45, fontSize: 30, color: '#3289a8'}}>Acuerdo #2983</Text>
+          <View style={styles.confirmacionAnular}>
+            <Text style={{fontSize: 30,color:'#6D6D6D',marginBottom:20}}>¿Agregar voto nulo?</Text>
+            <Image
+            style={styles.icono}
+            source={require("./Imagenes/anular.png")}
           />
-          <TextInput style={styles.touchable}
-            placeholder='correo'
-            onChangeText={(correo) => this.setState({correo})}
-          />
-          <TextInput style={styles.touchable}
-            placeholder='contraseña'
-            onChangeText={(password) => this.setState({password})}
-          />
-        
-        <TouchableOpacity style= {styles.aceptar} onPress={btnAceptar}>
-            <Text style= {{marginLeft: 10, marginTop: 11, fontSize: 16, color: 'black'}}>ACEPTAR</Text>
-        </TouchableOpacity>
+          <View style={styles.buttons}>
+            <TouchableOpacity style= {styles.popup_btn} onPress={()=> this.showView('viewOpciones')}>
+                <Text style= {{fontSize: 16, color: '#094683'}}>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style= {styles.popup_btn} onPress={btnUpdate3}>
+                <Text style= {{fontSize: 16, color: '#094683'}}>Aceptar</Text>
+            </TouchableOpacity>
+            </View>
+          </View>
+        </View>
 
+      )}
+
+      {this.state.Visibleview === 'Upload' &&(
+        <View style={styles.upload}>
+          <Image
+          style={styles.icono2}
+          source={require("./Imagenes/votar.png")}
+        />
+        </View>
+
+      )}
+
+      {this.state.Visibleview === 'Iniciar' &&(
+        <View style={styles.upload}>
+          <Text style={{marginTop: 85, fontSize: 30, color: '#3289a8'}}>Acuerdo #2984</Text>
+          <Image
+          style={styles.icono2}
+          source={require("./Imagenes/votar.png")}
+        />
+        <TouchableOpacity style= {styles.btn_siguiente} onPress={checkState}>
+          <Text style={{fontSize: 20, color: 'black'}}>Votar</Text>
+          </TouchableOpacity>
         </View>
 
       )}
@@ -145,6 +211,20 @@ export default class Inicio extends Component {
 
 //styles
 const styles = StyleSheet.create({
+    buttons: {
+      marginRight:30,
+      marginTop: 10,
+      flexDirection: "row",
+      flex: 1,
+      justifyContent: "spacing",
+    },
+    upload:{
+      flex: 1,
+      width: 500,
+      justifyContent: 'top',
+      alignItems: 'center',
+      backgroundColor: "#82C9FF",
+  },
     container:{
         flex: 1,
         justifyContent: 'top',
@@ -152,7 +232,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
     },
     container2:{
-      marginTop: 100,
+      marginTop: 70,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: "#82C9FF",
@@ -160,35 +240,40 @@ const styles = StyleSheet.create({
       height: 400,
       borderRadius: 15,
     },
-    container3:{
-      marginTop: 0,
+
+    confirmacionFavor:{
+      marginTop: 120,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: "red",
-      width: 350,
-      height: 400,
+      borderColor: '#15A140',
+      backgroundColor: '#C4F5B2',
+      width: 400,
+      height: 200,
       borderRadius: 15,
+      borderWidth: 3,
     },
 
-    containerMail:{
-      marginTop: 25,
-      alignItems: 'center',
+    confirmacionContra:{
+      marginTop: 120,
       justifyContent: 'center',
-      backgroundColor: '#718EA4',
+      alignItems: 'center',
+      borderColor: '#F55D5D',
+      backgroundColor: '#F5B7B2',
       width: 400,
-      height: 400,
-      borderWidth: 2,
-      borderColor: '#496D89',
+      height: 200,
+      borderRadius: 15,
+      borderWidth: 3,
     },
-    containerFacebook:{
-      marginTop: 25,
+    confirmacionAnular:{
+      marginTop: 120,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#123652',
+      borderColor: '#6D6D6D',
+      backgroundColor: '#E8E8E8',
       width: 400,
-      height: 400,
-      borderWidth: 2,
-      borderColor: '#496D89',
+      height: 200,
+      borderRadius: 15,
+      borderWidth: 3,
     },
     touchable:{
       width: 300,
@@ -225,14 +310,28 @@ const styles = StyleSheet.create({
       marginBottom: 15,
       borderWidth: 3,
     },
-    aceptar:{
-        width: 300,
+    btn_anular:{
+      width: 300,
+      height: 90,
+      borderRadius: 8,
+      borderColor: '#6D6D6D',
+      backgroundColor: '#E8E8E8',
+      justifyContent: 'center',
+      marginTop: 15,
+      alignItems: 'center',
+      marginBottom: 15,
+      borderWidth: 3,
+    },
+    popup_btn:{
+        marginHorizontal:5,
+        width: 100,
         height: 40,
         borderRadius: 8,
-        borderColor: 'black',
-        backgroundColor: '#e6f2ff',
+        borderColor: '#094683',
+        backgroundColor: '#D9EBFD',
         justifyContent: 'center',
         marginTop: 15,
+        marginLeft: 40,
         alignItems: 'center',
         marginBottom: 15,
         borderWidth: 1,
@@ -241,5 +340,24 @@ const styles = StyleSheet.create({
       width:50,
       height:50,
       alignItems: 'center',
-  }
+  },
+    icono2:{
+      marginTop: 200,
+      marginLeft:25,
+      width:200,
+      height:200,
+      alignItems: 'center',
+  },
+  btn_siguiente:{
+    width: 300,
+    height: 60,
+    borderRadius: 8,
+    borderColor: '#6D6D6D',
+    backgroundColor: '#E8E8E8',
+    justifyContent: 'center',
+    marginTop: 35,
+    alignItems: 'center',
+    marginBottom: 15,
+    borderWidth: 3,
+  },
 });

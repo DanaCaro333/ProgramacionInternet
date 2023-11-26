@@ -1,0 +1,11 @@
+--2023-11-24 16:32:36--  http://localhost/2023B/entrar.php/?Nombre=lalo
+Resolving localhost (localhost)... 127.0.0.1
+Connecting to localhost (localhost)|127.0.0.1|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 2 [text/html]
+Saving to: ‘index.html?Nombre=lalo’
+
+index.html?Nombre=l   0%[                    ]       0  --.-KB/s               index.html?Nombre=l 100%[===================>]       2  --.-KB/s    in 0s      
+
+2023-11-24 16:32:36 (205 KB/s) - ‘index.html?Nombre=lalo’ saved [2/2]
+

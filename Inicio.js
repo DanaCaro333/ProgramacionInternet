@@ -1,20 +1,30 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, Button, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { NavigationContext } from '@react-navigation/native'
-
 export default class Inicio extends Component {
   static contextType = NavigationContext;
   
   constructor(props) {
     super(props);
     this.state = {
+      nombre:'',
+      password:'',
     };
+
   }
 
   render() {
     const navigation = this.context;
+    // var VaciaDB = new XMLHttpRequest();
+    // VaciaDB.open('GET', `https://proyecto3286547.000webhostapp.com/2023B/start.php`);
+    // VaciaDB.send();
     const btnLogin = ()=>{
       var request = new XMLHttpRequest();
+      var update = new XMLHttpRequest();
+      // request.onerror = (e) => {
+      //   console.warn(`Hubo un pedote!!: ${e.statusText}`);
+      // };
+
       request.onreadystatechange = (e) => {
         if (request.readyState !== 4) {
           return;
@@ -22,13 +32,26 @@ export default class Inicio extends Component {
       
         if (request.status === 200) {
           console.log('success', request.responseText);
-          navigation.navigate('Votar')
         } else {
-          console.warn('error');
+          console.warn(`error: ${request.readyState} ${request.status}: ${request.statusText}`);
+        }
+
+        if(request.responseText === "-1"){
+          Alert.alert("Password o Nombre incorrecto, intenta de nuevo");
+        }
+        else if(request.responseText === "1"){
+          navigation.navigate('Resultado');
+        }else if(request.responseText === "0"){
+          update.open('GET', `http://192.168.1.74/2023B/total.php`);
+          update.send();
+          navigation.navigate('Votar');
+        }else{
+          console.log({nombre:request.responseText})
         }
       };
-      
-      request.open('GET', `https://insatiable-flap.000webhostapp.com/datos.php?nombre=${this.state.nombre}&correo=${this.state.correo}&password=${this.state.password}`);
+
+      request.open('GET', `http://192.168.1.74/2023B/entrar.php/?Nombre=${this.state.nombre}&Password=${this.state.password}`);
+      //request.open('GET', `https://proyecto3286547.000webhostapp.com/2023B/entrar.php/?Nombre=${this.state.nombre}&Password=${this.state.password}`);
       request.send();
     }
 
@@ -46,7 +69,7 @@ export default class Inicio extends Component {
           />
         <TextInput style={styles.campoPassword}
               placeholder='Password'
-              onChangeText={(nombre) => this.setState({nombre})}
+              onChangeText={(password) => this.setState({password})}
             />
 
         <TouchableOpacity style= {styles.buttonLogin} onPress={btnLogin} >

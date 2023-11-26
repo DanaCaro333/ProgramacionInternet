@@ -10,8 +10,8 @@ import type {PropsWithChildren} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
 
-//import Navigation from './Navigation';
-import TabOneScreen from './screens/TabOneScreen';
+import Navigation from './Navigation';
+//import TabOneScreen from './screens/TabOneScreen';
 //import Inicio from './Inicio';
 
 
@@ -26,10 +26,9 @@ function App(): JSX.Element {
 
   return (
     //<Inicio/>
-    <TabOneScreen/>
+    //<TabOneScreen/>
     
-    //  <Navigation/>
-    
+    <Navigation/>
     
   );
 }
